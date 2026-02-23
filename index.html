@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LLM Cost Estimator</title>
+</head>
+
+<body style="font-family: Arial; max-width:600px; margin:auto; padding:40px;">
+    <h2>💡 LLM Token & Cost Estimator</h2>
+
+    <textarea id="text" rows="8" style="width:100%;" placeholder="Enter text..."></textarea>
+    <br><br>
+
+    <select id="model">
+        <option value="gpt-3.5-turbo">GPT-3.5</option>
+        <option value="gpt-4">GPT-4</option>
+    </select>
+
+    <button onclick="analyze()">Analyze</button>
+
+    <h3 id="result"></h3>
+
+<script>
+async function analyze() {
+    const text = document.getElementById("text").value;
+    const model = document.getElementById("model").value;
+
+    const res = await fetch("/api/analyze", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({text, model})
+    });
+
+    const data = await res.json();
+
+    document.getElementById("result").innerText =
+        "Tokens: " + data.tokens + " | Cost: $" + data.cost;
+}
+</script>
+
+</body>
+</html>
